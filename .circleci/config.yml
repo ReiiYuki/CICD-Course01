@@ -6,6 +6,7 @@ install_and_update_dependency: &install_and_update_dependency
   name: install and update dependency
   command: |
     sudo apt-get update -qq
+    sudo npm install mocha -g
     npm install
 
 deploy_firebase: &deploy_firebase
@@ -13,19 +14,22 @@ deploy_firebase: &deploy_firebase
   command: |
     npm run build
     sudo npm install firebase-tools -g
-    firebase use ${PID}
+    firebase use ${FIREBASE_PROJECT_ID}
     firebase deploy --non-interactive --token "${FTOKEN}"
+
+test: &test
+  name: test
+  command: |
+    mocha
 
 version: 2
 jobs:
-  print_something:
+  test:
     <<: *docker_image
-
     steps:
-      - run: 
-          name: hello KU
-          command: |
-            echo 'hello from the other side'
+      - checkout
+      - run: *install_and_update_dependency
+      - run: *test
 
   deploy:
     <<: *docker_image
@@ -39,5 +43,5 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - print_something
+      - test
       - deploy
