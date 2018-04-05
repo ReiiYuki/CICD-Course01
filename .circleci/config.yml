@@ -14,7 +14,7 @@ deploy_firebase: &deploy_firebase
     npm run build
     sudo npm install firebase-tools -g
     firebase use $PID
-    firebase deploy --non-interactive --token $TOKEN
+    firebase deploy --non-interactive --token $FTOKEN
 
 version: 2
 jobs:
