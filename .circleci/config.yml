@@ -2,7 +2,7 @@ version: 2
 jobs:
   print_something:
     docker:
-      image: circleci/node:8.9.1
+      - image: circleci/node:8.9.1
     steps:
       - run:
           name: hello KU
